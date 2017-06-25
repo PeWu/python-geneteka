@@ -1,0 +1,34 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div class="container">
+
+  <h3>Parafie</h3>
+  <table class="table table-striped table-hover table-condensed">
+    <tr>
+      <th>Parafia</th>
+      <th>Województwo</th>
+    </tr>
+    {% for parish in parishes %}
+      <tr>
+        <td>
+          <a href="{{parish.parish_id}}.html">
+            {{parish.parish_name}}
+          </a>
+        </td>
+        <td>
+          <a href="{{parish.parish_id}}.html">
+            {{parish.voivodeship}}
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+</body>
+</html>

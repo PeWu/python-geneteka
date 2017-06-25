@@ -1,0 +1,114 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+{% macro personRecord(record) %}
+  <div>
+    <u>
+      Akt {{'urodzenia' if record.record_type == 'B' else 'zgonu'}}:
+      {{record.parish}} {{record.year}}/{{record.record_number}}
+    </u>
+  </div>
+  <div>Miejscowość: {{record.place}}</div>
+  <div>{{record.last_name_notes}}</div>
+  {% for note in record.notes %}
+    <div>{{note}}</div>
+  {% endfor %}
+  <a class="btn btn-warning btn-xs" role="button" href="{{genetekaPersonUrl(record)}}" target="_blank">Geneteka</a>
+  {% if record.metryki_url %}
+    <a class="btn btn-primary btn-xs" role="button" href="{{record.metryki_url}}" target="_blank">Metryki</a>
+  {% endif %}
+{% endmacro %}
+
+<div class="container">
+
+<h3>Małżeństwo</h3>
+
+  <div class="list-group">
+    <div class="list-group-item">
+      <h4 class="list-group-item-heading">
+        <strong>{{record.husband_first_name}} {{record.husband_last_name}}</strong>
+      </h4>
+      {% for h in husband %}
+        {{ personRecord(h) }}
+      <div class="help-block"></div>
+      {% endfor %}
+      {% for p in husband_parents %}
+        <div>Rodzice:
+          <a href="../{{p.record.parish_id}}/{{p.link}}.html">
+            {{p.record.husband_first_name}} {{p.record.husband_last_name}},
+            {{p.record.wife_first_name}} {{p.record.wife_last_name}}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="list-group-item">
+      <h4 class="list-group-item-heading">
+        <strong>{{record.wife_first_name}} {{record.wife_last_name}}</strong>
+      </h4>
+      {% for w in wife %}
+        {{ personRecord(w) }}
+      <div class="help-block"></div>
+      {% endfor %}
+      {% for p in wife_parents %}
+      <div>Rodzice:
+        <a href="../{{p.record.parish_id}}/{{p.link}}.html">
+          {{p.record.husband_first_name}} {{p.record.husband_last_name}},
+          {{p.record.wife_first_name}} {{p.record.wife_last_name}}
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="list-group-item">
+      <div><u>Akt małżeństwa: {{record.parish}} {{record.year}}/{{record.record_number}}</u></div>
+      {% for note in record.notes %}
+      <div>{{note}}</div>
+      {% endfor %}
+      <a class="btn btn-warning btn-xs"
+         role="button"
+         href="{{genetekaMarriageUrl(record)}}"
+         target="_blank">
+        Geneteka
+      </a>
+    </div>
+  </div>
+
+{% if children %}
+  <h3>Dzieci</h3>
+  <div class="list-group">
+    {% for c in children %}
+    <div class="list-group-item">
+      <h4 class="list-group-item-heading"><strong>{{c.first_name}} {{c.last_name}}</strong></h4>
+      {% for r in c.events %}
+      {{ personRecord(r) }}
+      <div class="help-block"></div>
+      {% endfor %}
+      {% for w in c.wives %}
+        <div>Żona:
+          <a href="../{{w.record.parish_id}}/{{w.link}}.html">
+            {{w.record.wife_first_name}} {{w.record.wife_last_name}}
+          </a>
+        </div>
+      {% endfor %}
+      {% for h in c.husbands %}
+        <div>Mąż:
+          <a href="../{{h.record.parish_id}}/{{h.link}}.html">
+            {{h.record.husband_first_name}} {{h.record.husband_last_name}}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+  <div class="alert alert-warning" role="alert">
+    Uwaga! Dane zostały scalone automatycznie i mogą występować błędy.
+  </div>
+  Źródło danych: <a href="http://geneteka.genealodzy.pl">Geneteka</a>
+</div>
+</body>
+</html>
