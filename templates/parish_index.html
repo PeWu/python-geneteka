@@ -14,6 +14,7 @@
       <th>Akt</th>
       <th>Mąż</th>
       <th>Żona</th>
+      <th></th>
     </tr>
     {% for record in records %}
       <tr>
@@ -31,6 +32,9 @@
           <a href="{{record.parish_id}}/{{makeFileName(getMarriageRecordId(record))}}.html">
             {{record.wife_first_name}} {{record.wife_last_name}}
           </a>
+        </td>
+        <td>
+          {% if something_matched.get(getMarriageRecordId(record)) %}*{% endif %}
         </td>
       </tr>
     {% endfor %}

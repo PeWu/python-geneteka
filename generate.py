@@ -308,6 +308,8 @@ def main():
   )
   familyTmpl = env.get_template('family.html')
 
+  somethingMatched = {}
+
   print("Writing output")
   for record in marriageData:
     parentsId = getSpousesToken(record)
@@ -381,6 +383,9 @@ def main():
     wifeParents = list({x['link']: x for x in wifeParents}.values())
     husbandParents = list({x['link']: x for x in husbandParents}.values())
 
+    somethingMatched[marriageRecordId] = (
+      husbands or wives or children or wifeParents or husbandParents)
+
     page = familyTmpl.render({
       'record': record,
       'husband': husbands,
@@ -415,6 +420,7 @@ def main():
       key = lambda r: '{:0>4}{:0>4}'.format(r['year'], r['record_number']))
     parishIndexPage = parishIndexTmpl.render({
       'records': sortedRecords,
+      'something_matched': somethingMatched,
       'getMarriageRecordId': getMarriageRecordId,
       'makeFileName': makeFileName,
     })
