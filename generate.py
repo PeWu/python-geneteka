@@ -12,6 +12,7 @@ import itertools
 import json
 import os
 import re
+import urllib.parse
 
 
 OUTPUT_DIR = "html"
@@ -252,6 +253,14 @@ def getParentsLink(record):
   }
 
 
+def parseUserName(name):
+  """Converts a URL-encoded username to string with special characters.
+  
+  Usernames in genealodzy.pl may contain Polish characters.
+  """
+  return urllib.parse.unquote(name, 'iso-8859-2')
+
+
 def main():
   birthData = loadAllFiles('data/*_B_*.json')
   deathData = loadAllFiles('data/*D_*.json')
@@ -395,6 +404,7 @@ def main():
       'husband_parents': husbandParents,
       'genetekaPersonUrl': genetekaPersonUrl,
       'genetekaMarriageUrl': genetekaMarriageUrl,
+      'parseUserName': parseUserName,
     })
 
     outputDir = os.path.join(OUTPUT_DIR, record['parish_id'])

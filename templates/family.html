@@ -18,6 +18,14 @@
   {% for note in record.notes %}
     <div>{{note}}</div>
   {% endfor %}
+  {% if record.user_entered %}
+    <div>
+      Indeks wprowadził:
+      <a href="http://www.genealodzy.pl/user.php?op=userinfo&uname={{record.user_entered}}">
+        {{parseUserName(record.user_entered)}}
+      </a>
+    </div>
+  {% endif %}
   <a class="btn btn-warning btn-xs" role="button" href="{{genetekaPersonUrl(record)}}" target="_blank">Geneteka</a>
   {% if record.metryki_url %}
     <a class="btn btn-primary btn-xs" role="button" href="{{record.metryki_url}}" target="_blank">Metryki</a>
@@ -66,8 +74,16 @@
     <div class="list-group-item">
       <div><u>Akt małżeństwa: {{record.parish}} {{record.year}}/{{record.record_number}}</u></div>
       {% for note in record.notes %}
-      <div>{{note}}</div>
+        <div>{{note}}</div>
       {% endfor %}
+      {% if record.user_entered %}
+      <div>
+        Indeks wprowadził:
+        <a href="http://www.genealodzy.pl/user.php?op=userinfo&uname={{record.user_entered}}">
+          {{parseUserName(record.user_entered)}}
+        </a>
+      </div>
+      {% endif %}
       <a class="btn btn-warning btn-xs"
          role="button"
          href="{{genetekaMarriageUrl(record)}}"
