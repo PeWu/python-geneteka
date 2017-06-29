@@ -226,20 +226,28 @@ def nonEmptyValuesCount(map):
   return len([x for x in map.values() if x])
 
 
+def makeFileName(name):
+  """Makes a string serve better as a file name."""
+  return (name
+          .encode('ascii', 'replace')
+          .decode('ascii')
+          .replace('?', '_'))
+
+
 def getFamilyLinks(records, mapping, marriageRecords):
   families = set()
   for r in records:
     for f in mapping[getPersonRecordId(r)]:
       families.add(f)
   return [
-    {'link': family, 'record': marriageRecords[family]}
+    {'link': makeFileName(family), 'record': marriageRecords[family]}
     for family in families]
 
 
 def getParentsLink(record):
   """Return structure used to display a link."""
   return {
-    'link': getMarriageRecordId(record),
+    'link': makeFileName(getMarriageRecordId(record)),
     'record': record,
   }
 
@@ -342,7 +350,7 @@ def main():
           'last_name': fam['husband_last_name'],
           'events': [],
           'wives': [{
-            'link': getMarriageRecordId(fam),
+            'link': makeFileName(getMarriageRecordId(fam)),
             'record': fam,
           }]
         })
@@ -355,7 +363,7 @@ def main():
           'last_name': fam['wife_last_name'],
           'events': [],
           'husbands': [{
-            'link': getMarriageRecordId(fam),
+            'link': makeFileName(getMarriageRecordId(fam)),
             'record': fam,
           }]
         })
@@ -388,7 +396,8 @@ def main():
     if not os.path.exists(outputDir):
       os.makedirs(outputDir)
 
-    outputFileName = os.path.join(outputDir, marriageRecordId + '.html')
+    outputFileName = os.path.join(
+        outputDir, makeFileName(marriageRecordId) + '.html')
     with open(outputFileName, 'w') as f:
       f.write(page)
 
@@ -401,10 +410,13 @@ def main():
   parishIndexTmpl = env.get_template('parish_index.html')
   for parishId, records in parishes.items():
     # Sort index by year and record number.
-    sortedRecords = sorted(records, key = lambda r: '{:0>4}{:0>4}'.format(r['year'], r['record_number']))
+    sortedRecords = sorted(
+      records,
+      key = lambda r: '{:0>4}{:0>4}'.format(r['year'], r['record_number']))
     parishIndexPage = parishIndexTmpl.render({
       'records': sortedRecords,
       'getMarriageRecordId': getMarriageRecordId,
+      'makeFileName': makeFileName,
     })
     outputFileName = os.path.join(OUTPUT_DIR, parishId + '.html')
     with open(outputFileName, 'w') as f:

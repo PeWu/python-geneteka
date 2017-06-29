@@ -18,17 +18,17 @@
     {% for record in records %}
       <tr>
         <td>
-          <a href="{{record.parish_id}}/{{getMarriageRecordId(record)}}.html">
+          <a href="{{record.parish_id}}/{{makeFileName(getMarriageRecordId(record))}}.html">
             {{record.year}}/{{record.record_number}}
           </a>
         </td>
         <td>
-          <a href="{{record.parish_id}}/{{getMarriageRecordId(record)}}.html">
+          <a href="{{record.parish_id}}/{{makeFileName(getMarriageRecordId(record))}}.html">
             {{record.husband_first_name}} {{record.husband_last_name}}
           </a>
         </td>
         <td>
-          <a href="{{record.parish_id}}/{{getMarriageRecordId(record)}}.html">
+          <a href="{{record.parish_id}}/{{makeFileName(getMarriageRecordId(record))}}.html">
             {{record.wife_first_name}} {{record.wife_last_name}}
           </a>
         </td>
