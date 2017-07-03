@@ -69,7 +69,7 @@ def splitParents(parents):
 def normalizeName(name):
   """Transforms a name to deal with common misspellings."""
   # Only use the first of several names.
-  oneName = name.split(' ', 1)[0]
+  oneName = name.split(' ', 1)[0].lower()
   REPLACEMENTS = [
     ['y$', 'a'],  # Szczęsny = Szczęsna
     ['i$', 'a'],  # Nowicki = Nowicka
@@ -88,7 +88,12 @@ def normalizeName(name):
     ['on', 'a'],  # on == ą
     ['om', 'a'],  # om == ą
     ['u', 'o'],  # u == ó
-    ['x', 'ks'],  # x == ks
+    ['x', 'ks'],
+    ['tt', 't'],
+    ['nn', 'n'],
+    ['ff', 'f'],
+    ['of', 'ow'],
+    ['nka$', 'na'],  # Irenka = Irena
   ]
   for repl in REPLACEMENTS:
     oneName = re.sub(repl[0], repl[1], oneName)
@@ -232,7 +237,8 @@ def makeFileName(name):
   return (name
           .encode('ascii', 'replace')
           .decode('ascii')
-          .replace('?', '_'))
+          .replace('?', '_')
+          .replace('/', '_'))
 
 
 def getFamilyLinks(records, mapping, marriageRecords):
